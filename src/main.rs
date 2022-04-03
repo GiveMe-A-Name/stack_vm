@@ -14,7 +14,7 @@ fn main() -> io::Result<()> {
         .filter_map(|line| filter_map_line(line))
         .collect();
 
-    let labels: Labels = line_slice
+    let _labels: Labels = line_slice
         .iter()
         .enumerate()
         .map(|(index, slice)| find_label(index, slice))
