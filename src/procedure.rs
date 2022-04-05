@@ -5,7 +5,7 @@ use crate::Pointer;
 // type Procedure<'a> = (&'a str, (Pointer, Pointer));
 pub type Procedures<'a> = HashMap<&'a str, (Pointer, Pointer)>;
 
-pub fn find_precedures<'a>(line_slice: &'a [Vec<&str>]) -> Procedures<'a> {
+pub fn find_procedures<'a>(line_slice: &'a [Vec<&str>]) -> Procedures<'a> {
     let mut cursor = 0;
     let mut procedures = Procedures::new();
     while cursor < line_slice.len() {

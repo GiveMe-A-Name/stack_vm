@@ -2,7 +2,7 @@ use std::fs::File;
 use std::io::{self, Read};
 
 use bytecode_vm::label::{find_label, Labels};
-use bytecode_vm::procedure::{find_precedures, Procedures};
+use bytecode_vm::procedure::{find_procedures, Procedures};
 
 fn main() -> io::Result<()> {
     let args: Vec<String> = std::env::args().collect();
@@ -20,7 +20,7 @@ fn main() -> io::Result<()> {
         .enumerate()
         .filter_map(|(index, slice)| find_label(index, slice))
         .collect();
-    let procedures: Procedures = find_precedures(&line_slice);
+    let procedures: Procedures = find_procedures(&line_slice);
 
     Ok(())
 }
