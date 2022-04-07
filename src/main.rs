@@ -1,8 +1,14 @@
 use std::fs::File;
 use std::io::{self, Read};
 
-use bytecode_vm::label::{find_label, Labels};
-use bytecode_vm::procedure::{find_procedures, Procedures};
+pub type Pointer = usize;
+
+mod instruction;
+mod label;
+mod procedure;
+
+use crate::label::{find_label, Labels};
+use crate::procedure::{find_procedures, Procedures};
 
 fn main() -> io::Result<()> {
     let args: Vec<String> = std::env::args().collect();
@@ -21,6 +27,8 @@ fn main() -> io::Result<()> {
         .filter_map(|(index, slice)| find_label(index, slice))
         .collect();
     let procedures: Procedures = find_procedures(&line_slice);
+
+    println!("{:?}", labels);
 
     Ok(())
 }
