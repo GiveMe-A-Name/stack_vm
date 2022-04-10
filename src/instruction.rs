@@ -1,4 +1,8 @@
-use crate::{label::Labels, procedure::Procedures, Pointer};
+use crate::{
+    label::{self, Labels},
+    procedure::Procedures,
+    Pointer,
+};
 
 /// instruction list
 ///
@@ -58,10 +62,37 @@ pub enum Instruction {
 
 pub type Instructions = Vec<Instruction>;
 
-pub fn parse_instructions(
-    line_slice: &[Vec<&str>],
-    labels: &Labels,
-    procedures: &Procedures,
-) -> Instructions {
-    todo!()
+pub fn parse_instruction(line: &[&str], labels: &Labels, procedures: &Procedures) -> Instruction {
+    use Instruction::*;
+
+    match line {
+        ["Push", x] => Push(x.parse().unwrap()),
+        ["Pop"] => Pop,
+        ["Add"] => Add,
+        ["Sub"] => Sub,
+        ["Mul"] => Mul,
+        ["Div"] => Div,
+        ["Incr"] => Incr,
+        ["Decr"] => Decr,
+        ["Get", x] => Get(x.parse().unwrap()),
+        ["Set", x] => Set(x.parse().unwrap()),
+        ["GetArg", x] => GetArg(x.parse().unwrap()),
+        ["SetArg", x] => SetArg(x.parse().unwrap()),
+        ["Noop"] => Noop,
+        ["Print"] => Print,
+        ["PinrtC"] => PrintC,
+        ["PrintStack"] => PrintStack,
+        ["Ret"] => Ret,
+        ["Call", proce_name] => {
+            let range = procedures.get(proce_name).unwrap();
+            Call(range.0)
+        }
+        ["Jump", label] => Jump(*labels.get(label).unwrap()),
+        ["JNE", label] => JNE(*labels.get(label).unwrap()),
+        ["JE", label] => JE(*labels.get(label).unwrap()),
+        ["JGE", label] => JGT(*labels.get(label).unwrap()),
+        ["JLT", label] => JLT(*labels.get(label).unwrap()),
+        ["JLE", label] => JLE(*labels.get(label).unwrap()),
+        _ => panic!("err instrucitons"),
+    }
 }
