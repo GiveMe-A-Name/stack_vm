@@ -2,11 +2,14 @@ use std::fs::File;
 use std::io::{self, Read};
 
 mod instruction;
+mod interpretor;
 mod label;
 mod procedure;
-use crate::instruction::{parse_instructions, Instructions};
+
+use crate::instruction::{parse_instruction, Instructions};
 use crate::label::{find_label, Labels};
 use crate::procedure::{find_procedures, Procedures};
+use interpretor::interpret_program;
 
 pub type Pointer = usize;
 
@@ -28,7 +31,12 @@ fn main() -> io::Result<()> {
         .collect();
     let procedures: Procedures = find_procedures(&line_slice);
 
-    let instructions: Instructions = parse_instructions(&line_slice, &labels, &procedures);
+    let instructions: Instructions = line_slice
+        .iter()
+        .map(|line| parse_instruction(line, &labels, &procedures))
+        .collect();
+
+    interpret_program(instructions);
 
     Ok(())
 }
