@@ -9,7 +9,7 @@ mod procedure;
 use crate::instruction::{parse_instruction, Instructions};
 use crate::label::{find_label, Labels};
 use crate::procedure::{find_procedures, Procedures};
-use interpretor::interpret_program;
+use interpretor::interpret;
 
 pub type Pointer = usize;
 
@@ -36,7 +36,7 @@ fn main() -> io::Result<()> {
         .map(|line| parse_instruction(line, &labels, &procedures))
         .collect();
 
-    interpret_program(instructions);
+    interpret(&instructions);
 
     Ok(())
 }

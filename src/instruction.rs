@@ -33,6 +33,8 @@ use crate::{
 /// | Call (procedure) | Calls a procedure |
 /// | Ret | return the procedure's value |
 /// | PrintStack | Prints the whole stack, used mostly for debugging |
+
+#[derive(Debug)]
 pub enum Instruction {
     Push(isize),
     Pop,
@@ -54,6 +56,7 @@ pub enum Instruction {
     JE(Pointer),
     JGT(Pointer),
     JLT(Pointer),
+    JGE(Pointer),
     JLE(Pointer),
     Call(Pointer),
     Ret,
@@ -80,19 +83,20 @@ pub fn parse_instruction(line: &[&str], labels: &Labels, procedures: &Procedures
         ["SetArg", x] => SetArg(x.parse().unwrap()),
         ["Noop"] => Noop,
         ["Print"] => Print,
-        ["PinrtC"] => PrintC,
+        ["PrintC"] => PrintC,
         ["PrintStack"] => PrintStack,
         ["Ret"] => Ret,
-        ["Call", proce_name] => {
-            let range = procedures.get(proce_name).unwrap();
-            Call(range.0)
-        }
+        ["Call", proce_name] => Call(procedures.get(proce_name).unwrap().0 + 1),
+        ["Proc", proc_name] => Jump(procedures.get(proc_name).unwrap().1),
         ["Jump", label] => Jump(*labels.get(label).unwrap()),
         ["JNE", label] => JNE(*labels.get(label).unwrap()),
         ["JE", label] => JE(*labels.get(label).unwrap()),
-        ["JGE", label] => JGT(*labels.get(label).unwrap()),
+        ["JGT", label] => JGT(*labels.get(label).unwrap()),
         ["JLT", label] => JLT(*labels.get(label).unwrap()),
+        ["JGE", label] => JGE(*labels.get(label).unwrap()),
         ["JLE", label] => JLE(*labels.get(label).unwrap()),
-        _ => panic!("err instrucitons"),
+        ["label", ..] => Noop,
+        [unkown_instruction, ..] => panic!("err instrucitons {}", unkown_instruction),
+        _ => panic!("unvalidate instruction"),
     }
 }

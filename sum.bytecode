@@ -20,7 +20,7 @@ label loop
     Get 1
     Push 100
     Sub
-    -- [accumulator, inde`x, index - 100]
+    -- [accumulator, index, index - 100]
     JNE loop
 Pop
 
