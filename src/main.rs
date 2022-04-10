@@ -1,14 +1,14 @@
 use std::fs::File;
 use std::io::{self, Read};
 
-pub type Pointer = usize;
-
 mod instruction;
 mod label;
 mod procedure;
-
+use crate::instruction::{parse_instructions, Instructions};
 use crate::label::{find_label, Labels};
 use crate::procedure::{find_procedures, Procedures};
+
+pub type Pointer = usize;
 
 fn main() -> io::Result<()> {
     let args: Vec<String> = std::env::args().collect();
@@ -28,7 +28,7 @@ fn main() -> io::Result<()> {
         .collect();
     let procedures: Procedures = find_procedures(&line_slice);
 
-    println!("{:?}", labels);
+    let instructions: Instructions = parse_instructions(&line_slice, &labels, &procedures);
 
     Ok(())
 }
